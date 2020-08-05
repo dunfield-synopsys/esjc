@@ -56,7 +56,7 @@ public class HttpClient implements AutoCloseable {
         operationTimeoutMillis = builder.operationTimeout.toMillis();
 
         bootstrap = new Bootstrap()
-            .remoteAddress(builder.address)
+            .remoteAddress(builder.address.getHostName(), builder.address.getPort())
             .option(ChannelOption.TCP_NODELAY, true)
             .option(ChannelOption.SO_REUSEADDR, false)
             .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, (int) builder.connectTimeout.toMillis())
@@ -243,7 +243,7 @@ public class HttpClient implements AutoCloseable {
          * @return the builder reference
          */
         public Builder address(String host, int port) {
-            return address(new InetSocketAddress(host, port));
+            return address(InetSocketAddress.createUnresolved(host, port));
         }
 
         /**
